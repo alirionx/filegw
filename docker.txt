@@ -1,0 +1,21 @@
+docker volume create \
+    --driver local \
+    --opt type=nfs \
+    --opt o=addr=192.168.10.20,rw \
+    --opt device=:/nfsdev \
+    nfsdev
+
+docker volume create \
+    --driver local \
+    --opt type=cifs \
+    --opt device=//192.168.10.20/nfsdev \
+    --opt o=username=dquilitzsch,password="Oviss1234!" \
+    cifsdev
+
+docker run \
+    -itd \
+    -p 81:80 -p 5000:5000 \ 
+    -v nfsdev:/data \
+    -e cifs=true \
+    --name filegw1 \ 
+    opensuse/leap /bin/bash
