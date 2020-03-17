@@ -31,9 +31,14 @@ def html_home():
         return 'Bad Request', 400 
 
     dirAry = os.listdir(davPath)
-
     dirJson = json.dumps(dirAry, indent=2)
-    return '<pre>'+dirJson+'</pre>'
+    #return '<pre>'+dirJson+'</pre>'
+
+    return render_template(
+        'browse.html', 
+        view='browse',
+        dirAry=dirAry
+    )
 
 
 

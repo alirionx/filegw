@@ -1,0 +1,42 @@
+<!doctype html>
+<head>
+    <meta charset="utf-8">
+    <meta name="OpenKV SWP - File Transfer SCS - WebUI" content="width=device-width, initial-scale=1.0">        
+    <title>OpenKV SWP - File Transfer SCS - WebUI</title>
+        
+    <link rel="shortcut icon" href="{{ url_for('static', filename='gfx/favicon.ico') }}" >
+    <link rel="icon" href="{{ url_for('static', filename='gfx/favicon.ico') }}" type="image/x-icon">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/kvbw.css') }}" >
+
+    <script src="{{ url_for('static', filename='modules/base.js') }}" ></script>
+      
+</head>
+
+<body>
+
+<div id="headBlock">
+    <table border="0"><tr>
+        <td>
+            <img css="logo" src="{{ url_for('static', filename='gfx/kvbw_logo.png') }}" />
+        </td>
+        <td>
+            <div css="arrowRight"></div>
+            <div css="headLine">OpenKV - Software Plattform</div>
+            <div css="arrowLeft"></div>
+        </td>
+        <td>
+            <div css="scsBox">SCS - File Gateway</div>
+        </td>
+    </tr></table>
+    <div css="sepLine"></div>
+</div>
+
+<section class="content">
+    {% block content %}{% endblock %}
+</section>
+
+<!--div id="pageFooter">Da Footer</div-->
+
+</body>
+</html>
