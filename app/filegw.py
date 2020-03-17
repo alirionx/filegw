@@ -1,17 +1,17 @@
 #!/usr/bin/python3
 
-#apt install python3 python3-pip libnfs-dev
-#pip3 install libnfs
+#apt install python3 python3-pip python3-flask python3-twisted python3-cheroot 
+#pip3 install wsgidav # läuft auf collections_abc fehler (Lösung: import collections.abc as collections_abc)
 #https://twisted.readthedocs.io/en/twisted-16.3.0/web/howto/using-twistedweb.html
 #https://wsgidav.readthedocs.io/en/latest/index.html
 
-#nfs = libnfs.NFS('nfs://192.168.10.20/nfsdev')
-#a = nfs.open('/test.txt', mode='w+')
-#a.write(dateTime)
-#a.close()
+#-Install in virtenv in docker-------------------
+#apt update && apt install -y python3 python3-venv
+#python3 -m venv /myapp
+#source /myapp/bin/activate 
+#pip install flask cheroot wsgidav
+#https://www.codementor.io/@abhishake/minimal-apache-configuration-for-deploying-a-flask-app-ubuntu-18-04-phu50a7ft
 
-#fileList = nfs.listdir('/')
-#print(fileList)
 
 #-Import needed modules---------------------------------------------------
 import os
@@ -26,7 +26,7 @@ from globals import scriptDir
 
 
 #-Import custom modules-------
-from webapi import start_apisrv
+from webapisrv import start_apisrv
 from davsrv import start_davsrv
 
 #-Sub Process Handler-----------------------------------------------------
