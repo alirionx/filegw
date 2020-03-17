@@ -19,12 +19,14 @@ commonConf = {
         "user_mapping": {"*": True}
     },
     "provider_mapping": {
-        "/": dataPath,
+        "/davsrv": dataPath,
     },
     "verbose": 1,
 }
 
 #-The WebDav Service------------------------
+
+app = WsgiDAVApp(commonConf)
 
 def start_davsrv(config=False):
     if config == False:
