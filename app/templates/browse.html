@@ -1,25 +1,38 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div id="browserBox" class="browserBox">
+    <div css="pathBar">
+    {% for entry in pathObj %}
+        {% set dir = entry['dir'] %}
+        {% set lnk = '?path='+entry['lnk'] %}
+        <div onclick="location.href='{{ lnk }}';">{{ dir }}/</div>
+    {% endfor %}
+        <button onclick="location.href='/zip/upload';">upload zip</button>
+        <button onclick="location.href='/file/upload';">upload</button>
+    </div>
 
-<h2>Hallo KVBW!</h2>
+    <div css="exploreBox">
+    {% for entry in dirObj %}
 
-{% for entry in dirObj %}
+        {% set type = entry['type'] %}
+        {% set path = entry['path'] %}
+        {% set lnk = '?path='+entry['lnk'] %}
 
-    {% set type = entry['type'] %}
-    {% set path = entry['path'] %}
-    {% set lnk = '?path='+entry['lnk'] %}
+        {% set lnkPath = davPath+'/'+entry['path'] %}
+        {% if davPath == '/' %}
+            {% set lnkPath = davPath+entry['path'] %}
+        {% endif %}
 
-    {% set lnkPath = davPath+'/'+entry['path'] %}
-    {% if davPath == '/' %}
-        {% set lnkPath = davPath+entry['path'] %}
-    {% endif %}
+        {% if type == 'dir' %}
+            <div css="{{ type }}" oncontextmenu="folder_menu_call(event);" lnk="{{ lnk }}" onclick="location.href='{{ lnk }}';">{{ path }}</div>
+        {% endif %}
+        {% if type == 'file' %}
+            <div css="{{ type }}" oncontextmenu="file_menu_call(event);" onclick="console.log('{{ path }}')">{{ path }}</div>
+        {% endif %}
 
-    
-    
-    <div onclick="location.href='{{ lnk }}';">{{ type }} => {{ path }}</div>
+    {% endfor %}
+    </div>
 
-{% endfor %}
-
-
+</div>
 {% endblock %}

@@ -1,0 +1,19 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form method="POST" action="/api/data/delete" target="_self">
+    <input name="path" type="text" value="{{ path }}" style="display:none;" />
+    <input name="backto" type="text" value="{{ backTo }}" style="display:none;" />
+
+    <div class="msgBox">
+        <div css="msg">{{ msg }}</div>
+        <div class="btnFrame">
+            <button type="submit">Ok</button>
+            <button type="button" onclick="location.href='{{ backTo }}';" >Abbrechen</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

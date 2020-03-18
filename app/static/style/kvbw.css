@@ -8,7 +8,7 @@ body{
 	margin:0;
 	font-family: 'Arial','Helvetica','sans-serif';
 	font-size:14px;
-	padding:100px 6px 6px 6px;
+	padding:110px 6px 6px 6px;
 	background-color:#fff;
 	*background-image: linear-gradient(#BBB, rgb(216, 216, 216));
 	background-repeat: no-repeat;
@@ -36,7 +36,7 @@ body{
 #headBlock table td:nth-child(2){
     text-align: center;
     vertical-align: bottom;
-    padding-bottom:12px;
+    padding-bottom:14px;
 }
 #headBlock table td:last-child{
     text-align: right;
@@ -93,4 +93,213 @@ body{
     width: 98%;
     margin:auto 1.5% auto 0.5%;
     background-color: #d9d9e8;
+}
+
+.browserBox{
+    display:table;
+    width: 70%;
+    min-width: 800px;
+    margin:auto;
+    padding:20px;
+    margin-top: 10px;
+    font-size: 16px;
+    border-radius: 10px;
+    background-color: #f1f1f1;
+}
+.browserBox div[css=pathBar]{
+    background-color: #ddd;
+    padding:6px 6px 6px 12px;
+    margin: auto auto 14px auto;
+    color:#000;
+    font-weight: bold;
+    border-radius: 4px;
+}
+.browserBox div[css=pathBar] div{
+    margin-left:-2px;
+    display:inline-block;
+    cursor:pointer;
+    border-radius: 4px;
+}
+.browserBox div[css=pathBar] div:hover{
+    display:inline-block;
+    text-decoration: underline;
+}
+.browserBox div[css=pathBar] button{
+    float:right;
+    width:80px;
+    background-color: #94173b;
+    color:#fff;
+    font-size: 13px;
+    font-weight: normal;
+    padding:2px;
+    margin:-2px 2px auto 2px;
+    border-radius: 3px;
+    border: 1px solid #471010;
+    text-align: center;
+    cursor:pointer;
+}
+.browserBox div[css=pathBar] button:hover{
+    background-color: #791531;
+}
+
+.browserBox div[css=exploreBox]{
+    background-color: #f6f6f6;
+    padding:8px;
+    border-radius:8px;
+}
+
+.browserBox div[css=dir]{
+    position: relative;
+    width:98%;
+    padding:2px 2px 2px 8px ;
+    border-radius: 4px;
+    color: #000066;
+    font-weight: bold;
+    font-size: 14px;
+    cursor:pointer;
+}
+.browserBox div[css=dir]:hover{
+    background-color: #d9d9e8;
+}
+.browserBox div[css=file]{
+    position: relative;
+    width:98%;
+    padding:2px 2px 2px 8px ;
+    border-radius: 4px;
+    color: #000;
+    font-size: 14px;
+    cursor:pointer;
+}
+.browserBox div[css=file]:hover{
+    background-color: #ddd;
+}
+
+.actMenuFrame{
+    position: absolute;
+    margin:-10px auto auto 40px;
+    width:100px;
+    z-index: 10;
+}
+.actMenuFrame div[css=arrow]{
+    position:absolute;
+    left:-24px;
+    top:2px;
+    width: 0; 
+    height: 0; 
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-right: 20px solid #94173b;
+}
+.actMenuFrame div[css=btn]{
+    background-color: #94173b;
+    color:#fff;
+    font-size: 13px;
+    font-weight: normal;
+    padding:4px;
+    margin:-2px;
+    border-radius: 4px;
+    border: 1px solid #471010;
+    text-align: center;
+    cursor:pointer;
+}
+.actMenuFrame div[css=btn]:hover{
+    background-color: #791531;
+}
+
+.msgBox{
+    display:table;
+    width: 50%;
+    min-width: 300px;
+    max-width: 600px;
+    margin:auto;
+    padding:20px;
+    margin-top: 10px;
+    font-size: 16px;
+    border-radius: 10px;
+    background-color: #f1f1f1;
+}
+.msgBox div[css=msg]{
+    background-color: #fff;
+    padding:18px;
+    margin: auto auto 14px auto;
+    color:#000066;
+    *font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 6px;
+}
+
+
+.btnFrame{
+    text-align: center;
+}
+.btnFrame button{
+    width:110px;
+    background-color: #94173b;
+    color:#fff;
+    font-size: 14px;
+    font-weight: normal;
+    padding:4px;
+    margin:4px 10px 4px 10px;
+    border-radius: 6px;
+    border: 1px solid #471010;
+    text-align: center;
+    cursor:pointer;
+}
+.btnFrame button:hover{
+    background-color: #791531;
+}
+
+
+.blocker{
+	position:fixed;
+	top:0%;
+	left:0%;
+	width:100%;
+	height:100%;
+	padding-top: 0%;
+	text-align:center;
+	background-color:rgba(240, 240, 240, 0.8);
+	z-index:1;
+}
+.spinner {
+    margin: 48vh auto 0;
+    width: 70px;
+    text-align: center;
+}
+  
+.spinner > div {
+    width: 18px;
+    height: 18px;
+    background-color: #333;
+  
+    border-radius: 100%;
+    display: inline-block;
+    -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+    animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
+  
+.spinner .bounce1 {
+    -webkit-animation-delay: -0.32s;
+    animation-delay: -0.32s;
+}
+  
+.spinner .bounce2 {
+    -webkit-animation-delay: -0.16s;
+    animation-delay: -0.16s;
+}
+  
+@-webkit-keyframes sk-bouncedelay {
+    0%, 80%, 100% { -webkit-transform: scale(0) }
+    40% { -webkit-transform: scale(1.0) }
+}
+  
+@keyframes sk-bouncedelay {
+    0%, 80%, 100% { 
+      -webkit-transform: scale(0);
+      transform: scale(0);
+    } 40% { 
+      -webkit-transform: scale(1.0);
+      transform: scale(1.0);
+    }
 }
