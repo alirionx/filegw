@@ -4,8 +4,21 @@
 
 <h2>Hallo KVBW!</h2>
 
-{% for file in dirAry %}
-<div>{{ file }}</div>
+{% for entry in dirObj %}
+
+    {% set type = entry['type'] %}
+    {% set path = entry['path'] %}
+    {% set lnk = '?path='+entry['lnk'] %}
+
+    {% set lnkPath = davPath+'/'+entry['path'] %}
+    {% if davPath == '/' %}
+        {% set lnkPath = davPath+entry['path'] %}
+    {% endif %}
+
+    
+    
+    <div onclick="location.href='{{ lnk }}';">{{ type }} => {{ path }}</div>
+
 {% endfor %}
 
 

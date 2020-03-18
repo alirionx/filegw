@@ -24,20 +24,65 @@ app.debug = True
 @app.route('/', methods=['GET']) 
 def html_home():
     davPath = dataPath
+
     if request.args.get('path') != None:
-        davPath += request.args.get('path')
+        newPath = request.args.get('path')
+        if newPath.endswith('../'):
+            newPath = newPath.replace('../', '')
+            pathSplit = newPath.split('/')
+            if len(pathSplit) > 0:
+                pathSplit = pathSplit[:-1]
+            davPath = '/'.join(pathSplit)
+
+            return redirect('?path='+davPath, code=302)
+        else:
+            davPath += newPath
+
+    davPath = davPath.replace('//', '/')
 
     if not os.path.isdir(davPath):
         return 'Bad Request', 400 
 
+    dirObj = []
     dirAry = os.listdir(davPath)
-    dirJson = json.dumps(dirAry, indent=2)
+    dirAry.sort()
+    
+    if davPath not in ['', '/']:
+        dirObj = [{
+            "path":'../',
+            "type":"dir",
+            "lnk":davPath+"../"
+        }]
+
+    for val in dirAry:
+        isPath = (davPath + '/' + val).replace('//', '/')
+        if os.path.isdir(isPath):
+            toAdd = { 
+                "path":val, 
+                "type":"dir",
+                "lnk":isPath
+            }
+            dirObj.append(toAdd)
+
+    for val in dirAry:
+        isPath = (davPath + '/' + val).replace('//', '/')
+        if os.path.isfile(isPath):
+            toAdd = { 
+                "path":val, 
+                "type":"file",
+                "lnk":""
+            }
+            dirObj.append(toAdd)
+
+    #dirJson = json.dumps(dirAry, indent=2)
     #return '<pre>'+dirJson+'</pre>'
 
     return render_template(
         'browse.html', 
         view='browse',
-        dirAry=dirAry
+        davPath=davPath,
+        dirAry=dirAry,
+        dirObj=dirObj
     )
 
 
