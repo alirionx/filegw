@@ -8,8 +8,9 @@
         {% set lnk = '?path='+entry['lnk'] %}
         <div onclick="location.href='{{ lnk }}';">{{ dir }}/</div>
     {% endfor %}
-        <button onclick="location.href='/zip/upload';">upload zip</button>
-        <button onclick="location.href='/file/upload';">upload</button>
+        <button onclick="location.href='/mkdir?path={{ davPath }}';">mkdir</button>    
+        <button onclick="location.href='/zip/upload?path={{ davPath }}';">upload zip</button>
+        <button onclick="location.href='/file/upload?path={{ davPath }}';">upload</button>
     </div>
 
     <div css="exploreBox">
@@ -25,10 +26,10 @@
         {% endif %}
 
         {% if type == 'dir' %}
-            <div css="{{ type }}" oncontextmenu="folder_menu_call(event);" lnk="{{ lnk }}" onclick="location.href='{{ lnk }}';">{{ path }}</div>
+            <div css="{{ type }}" oncontextmenu="data_menu_call(event, 'dir');" lnk="{{ lnk }}" onclick="location.href='{{ lnk }}';">{{ path }}</div>
         {% endif %}
         {% if type == 'file' %}
-            <div css="{{ type }}" oncontextmenu="file_menu_call(event);" onclick="console.log('{{ path }}')">{{ path }}</div>
+            <div css="{{ type }}" oncontextmenu="data_menu_call(event, 'file');" lnk="{{ lnk }}" onclick="">{{ path }}</div>
         {% endif %}
 
     {% endfor %}
@@ -36,3 +37,5 @@
 
 </div>
 {% endblock %}
+
+

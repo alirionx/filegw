@@ -1,0 +1,23 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form method="POST" action="/api/file/upload"+ target="_self"  enctype="multipart/form-data">
+    <input name="path" type="text" value="{{ path }}" style="display:none;" />
+    <input name="backto" type="text" value="{{ backTo }}" style="display:none;" />
+    <input id="filesIpt" type="file" name="files[]" multiple="true" onchange="add_files_to_list(this, 'fileList' );" style="display:none;" />
+
+    <div id="fileBox" class="fileBox">
+        <div css="inf" onclick="document.getElementById('filesIpt').click();">Für Dateiauswahl hier klicken ( Zielpfad: {{ path }} )</div>
+        <div css="fileList" id="fileList"></div>
+        
+        <div class="btnFrame">
+            <button onclick="loader_call(document.getElementById('fileBox'))" type="submit">Ok</button>
+            <button type="button" onclick="location.href='{{ backTo }}';" >Abbrechen</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}
+

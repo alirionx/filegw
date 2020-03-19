@@ -1,0 +1,27 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form method="POST" action="/api/mkdir"+ target="_self" >
+    <input name="path" type="text" value="{{ path }}" style="display:none;" />
+    <input name="backto" type="text" value="{{ backTo }}" style="display:none;" />
+
+    <div id="fileBox" class="fileBox">
+        <div css="hl">Neuen Ordner erstellen in Zielpfad: {{ path }}</div>
+        <input 
+            type="text" 
+            name="mkdir" 
+            placeholder="bitte Name des neuen Ordners eingeben" 
+            pattern="[a-zA-Z0-9]{1,16}" 
+            title="maximal 16 Zeichen, keine Sonderzeichen" />
+        
+        <div class="btnFrame">
+            <button type="submit">Ok</button>
+            <button type="button" onclick="location.href='{{ backTo }}';" >Abbrechen</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}
+

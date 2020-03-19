@@ -85,7 +85,7 @@ def html_browser():
             toAdd = { 
                 "path":val, 
                 "type":"file",
-                "lnk":""
+                "lnk":isPath
             }
             dirObj.append(toAdd)
 
@@ -108,8 +108,64 @@ def html_browser():
         pathObj=pathObj,
         dirObj=dirObj
     )
+
 #--------------------------------
-@app.route('/folder/delete', methods=['GET']) 
+@app.route('/mkdir', methods=['GET']) 
+def html_make_dir():
+    if request.args.get('path') == None:
+        return 'parameter path not set', 400
+
+    path = request.args.get('path')
+    if not os.path.isdir(path):
+        return 'path does not exist ', 400
+
+    #-Render HTML Template---
+    return render_template(
+        'make_dir.html', 
+        view='make_dir',
+        path=path,
+        backTo='/?path='+path
+    )
+
+
+#--------------------------------
+@app.route('/file/upload', methods=['GET']) 
+def html_file_upload():
+    if request.args.get('path') == None:
+        return 'parameter path not set', 400
+
+    path = request.args.get('path')
+    if not os.path.isdir(path):
+        return 'path does not exist ', 400
+
+    #-Render HTML Template---
+    return render_template(
+        'upload_file.html', 
+        view='file_upload',
+        path=path,
+        backTo='/?path='+path
+    )
+
+#--------------------------------
+@app.route('/zip/upload', methods=['GET']) 
+def html_zip_upload():
+    if request.args.get('path') == None:
+        return 'parameter path not set', 400
+
+    path = request.args.get('path')
+    if not os.path.isdir(path):
+        return 'path does not exist ', 400
+
+    #-Render HTML Template---
+    return render_template(
+        'upload_zip.html', 
+        view='zip_upload',
+        path=path,
+        backTo='/?path='+path
+    )
+
+#--------------------------------
+@app.route('/data/delete', methods=['GET']) 
 def html_folder_delete():
     if request.args.get('path') == None or request.args.get('path') == '/':
         return 'parameter path not set', 400
@@ -121,7 +177,7 @@ def html_folder_delete():
     #-Render HTML Template---
     return render_template(
         'confirm.html', 
-        view='folder_delete',
+        view='data_delete',
         msg=msg,
         path=path,
         backTo='/?path='+btPath
@@ -130,31 +186,127 @@ def html_folder_delete():
 
 
 #-API Section-------------------------------------------------------------
+
+@app.route('/api/mkdir', methods=['POST']) 
+def api_make_dir():
+    try: 
+        path = request.form['path']
+        mkdir = request.form['mkdir']
+        newPath = path + '/' + mkdir
+        newPath = newPath.replace('//', '/')
+    except: 
+        return 'Bad Request', 400
+
+    try: backTo =  request.form['backto'].replace('//', '/')
+    except: backTo = '/'
+
+    try:
+        os.mkdir(newPath)
+    except:
+        return 'Something went wrong. Maybe missing rights to create a folder here...', 400
+
+    return redirect(backTo, code=302)
+
+#--------------------------------
+@app.route('/api/file/download', methods=['GET']) 
+def api_file_download():
+    if request.args.get('path') == None:
+        return 'parameter path not set', 400
+    path = request.args.get('path')
+    try:
+        return send_file(path, as_attachment=True)
+    except FileNotFoundError:
+        abort(404)
+
 @app.route('/api/zip/download', methods=['GET']) 
 def api_zip_download():
     if request.args.get('path') == None:
         return 'parameter path not set', 400
 
     path = request.args.get('path')
-    fName = path.split('/')[-1]
-    fName = ''.join(e for e in fName if e.isalnum())
-    fPath = '/tmp/'+fName
+    if os.path.isdir(path):
+        fName = path.split('/')[-1]
+        fName = ''.join(e for e in fName if e.isalnum())
+        fPath = '/tmp/'+fName
 
-    shutil.make_archive(fPath, 'zip', path)
+        shutil.make_archive(fPath, 'zip', path)
+        try:
+            return send_file(fPath+'.zip', as_attachment=True)
+            print(fPath+'.zip')
+        except FileNotFoundError:
+            abort(404)
+    
+    elif os.path.isfile(path):
+        fSrc = path.split('/')[:-1]
+        fSrc = '/'.join(fSrc)
+        fName = path.split('/')[-1]
+        fPath = '/tmp/'+fName
 
-    #zipf = zipfile.ZipFile(fName, 'w', zipfile.ZIP_DEFLATED)
-    #zipdir('tmp/', zipf)
-    #zipf.close()
+        shutil.make_archive(fPath, 'zip', fSrc, fName)
+        try:
+            return send_file(fPath+'.zip', as_attachment=True)
+        except FileNotFoundError:
+            abort(404)
+    else:
+        return 'Bad Request', 400
 
-    #return fPath
-    #return send_file(fPath+'.zip', attachment_filename=fName+'.zip')
-    try:
-        return send_file(fPath+'.zip', as_attachment=True)
-    except FileNotFoundError:
-        abort(404)
 
 #------------------
+@app.route('/api/file/upload', methods=['POST']) 
+def api_file_upload():
+    
+    try: 
+        path = request.form['path']
+        fileList = request.files.getlist('files[]')
+    except: 
+        return 'Bad Request', 400
 
+    try: backTo =  request.form['backto'].replace('//', '/')
+    except: backTo = '/'
+
+    chk = True
+    for file in fileList:
+        try:
+            file.save(os.path.join(path, file.filename))
+        except:
+            chk = False
+
+    if chk == False: 
+        return 'Upload failed', 400
+    
+    return redirect(backTo, code=302)
+
+
+#------------------
+@app.route('/api/zip/upload', methods=['POST']) 
+def api_zip_upload():
+    
+    try: 
+        path = request.form['path']
+        fileList = request.files.getlist('files[]')
+    except: 
+        return 'Bad Request', 400
+
+    print(fileList)
+    try: backTo =  request.form['backto'].replace('//', '/')
+    except: backTo = '/'
+
+    chk = True
+    for file in fileList:
+        try:
+            print(file.filename)
+            file.save(os.path.join('/tmp', file.filename))
+            shutil.unpack_archive('/tmp/'+file.filename, path, 'zip')
+        except:
+            chk = False
+
+    if chk == False: 
+        return 'Upload failed', 400
+    
+    return redirect(backTo, code=302)
+    
+
+#------------------
 @app.route('/api/data/delete', methods=['POST']) 
 def api_folder_delete():
     

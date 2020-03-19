@@ -7,7 +7,7 @@ addEventListener('click', function(event){
     }
 });
 
-function folder_menu_call(event){
+function data_menu_call(event, typ){
     
     remove_elms_by_class("actMenuFrame");
     
@@ -19,15 +19,21 @@ function folder_menu_call(event){
     var xPos = event.clientX + "px";
     var yPos = event.clientY + "px";
 
-    var menuOpt = {
+    var menuOpt = {}
+    menuOpt['dir'] = {
         "open": lnk,
         "download zip": "/api/zip/download"+lnk, 
-        "delete": "/folder/delete"+lnk
+        "delete": "/data/delete"+lnk
     }
     if(lnk.endsWith("../")){
-        var menuOpt = {
+        menuOpt['dir'] = {
             "up": lnk
         }
+    }
+    menuOpt['file'] = {
+        "download": "/api/file/download"+lnk, 
+        "download zip": "/api/zip/download"+lnk, 
+        "delete": "/data/delete"+lnk
     }
 
     var actMenuFrame = document.createElement("DIV");
@@ -40,11 +46,11 @@ function folder_menu_call(event){
     actMenuFrame.appendChild(actMenuArrow);
     actMenuArrow.setAttribute("css", "arrow");
     
-    for(var prop in menuOpt){
+    for(var prop in menuOpt[typ]){
         var actMenuBtn = document.createElement("DIV");
         actMenuFrame.appendChild(actMenuBtn);
         actMenuBtn.setAttribute("css", "btn");
-        actMenuBtn.setAttribute("lnk", menuOpt[prop]);
+        actMenuBtn.setAttribute("lnk", menuOpt[typ][prop]);
         actMenuBtn.innerHTML = prop;
         actMenuBtn.onclick = function(){
             var lnk = this.getAttribute("lnk");
@@ -57,11 +63,6 @@ function folder_menu_call(event){
     }
 }
 
-function file_menu_call(event){
-    event.preventDefault();
-    var tgtElm = event.target;
-    
-}
 
 
 //-Helpers---------------------------------------------------------
@@ -88,6 +89,19 @@ xhttp.send();
 
 //--------------------------------
 
+function add_files_to_list(iptElm, elmId ){
+    var tgtDiv = document.getElementById(elmId);
+    tgtDiv.innerHTML = "";
+
+    for (var i = 0; i < iptElm.files.length; i++) {
+        var flDiv = document.createElement("DIV");
+        tgtDiv.appendChild(flDiv);
+        flDiv.innerHTML = iptElm.files[i]['name'];
+    }
+}
+
+//--------------------------------
+
 function loader_call(target=document.body){
 		
     var blocker = document.createElement("div");
@@ -97,7 +111,6 @@ function loader_call(target=document.body){
     loader_frame.classList.add("spinner");
 
     for (var i = 1; i < 4; i++) {
-
         var loader_bounce = document.createElement("div");
         loader_bounce.classList.add("bounce"+i);
         loader_frame.appendChild(loader_bounce);
