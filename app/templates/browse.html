@@ -8,7 +8,7 @@
         {% set lnk = '?path='+entry['lnk'] %}
         <div onclick="location.href='{{ lnk }}';">{{ dir }}/</div>
     {% endfor %}
-        <button onclick="location.href='/mkdir?path={{ virtPath }}';">mkdir</button>    
+        <button onclick="location.href='/mkdir?path={{ virtPath }}';">mkdir</button>
         <button onclick="location.href='/zip/upload?path={{ virtPath }}';">upload zip</button>
         <button onclick="location.href='/file/upload?path={{ virtPath }}';">upload</button>
     </div>

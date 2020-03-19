@@ -19,7 +19,7 @@ commonConf = {
         "user_mapping": {"*": True}
     },
     "provider_mapping": {
-        "/davsrv": dataPath,
+        "/": dataPath,
     },
     "verbose": 1,
 }

@@ -1,16 +1,17 @@
 #!/usr/bin/python3
 
-#apt install python3 python3-pip python3-flask python3-twisted python3-cheroot 
-#pip3 install wsgidav # läuft auf collections_abc fehler (Lösung: import collections.abc as collections_abc)
-#https://twisted.readthedocs.io/en/twisted-16.3.0/web/howto/using-twistedweb.html
-#https://wsgidav.readthedocs.io/en/latest/index.html
+#-Install on local system-------------------------
+# apt install python3 python3-pip python3-flask python3-cheroot 
+# pip3 install wsgidav # läuft auf collections_abc fehler (Lösung: import collections.abc as collections_abc)
 
-#-Install in virtenv in docker-------------------
-#apt update && apt install -y python3 python3-venv
-#python3 -m venv /myapp
-#source /myapp/bin/activate 
-#pip install flask cheroot wsgidav
-#https://www.codementor.io/@abhishake/minimal-apache-configuration-for-deploying-a-flask-app-ubuntu-18-04-phu50a7ft
+
+#-Install in virtenv (runs also in docker)--------
+# apt update && apt install -y python3 python3-venv
+# python3 -m venv /myapp
+# source /myapp/bin/activate   oder   . /myapp/bin/activate
+# pip install flask cheroot wsgidav
+# 
+# Howto:https://www.codementor.io/@abhishake/minimal-apache-configuration-for-deploying-a-flask-app-ubuntu-18-04-phu50a7ft
 
 
 #-Import needed modules---------------------------------------------------

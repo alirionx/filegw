@@ -1,4 +1,4 @@
-#!/app/bin/python
+#!/app/venv/python
 import logging
 import sys
 logging.basicConfig(stream=sys.stderr)

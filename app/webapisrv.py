@@ -13,11 +13,15 @@ import json
 from flask import Flask, request, redirect, url_for, send_from_directory, session, render_template, send_file
 
 #-Global and Session Vars-------------------------------------------------
+from globals import urlBase
 from globals import dataPath
 from globals import tmpPath
 from globals import scriptDir
 
 app = Flask(__name__)
+#template_dir = os.path.dirname(os.path.realpath(__file__)) + '/templates'
+#app = Flask(__name__, template_folder='/app/templates')
+
 app.secret_key = "changeit"
 app.debug = True
 
@@ -223,9 +227,56 @@ def html_folder_delete():
 
 #-API Section---------------------------------------------------------------------
 
-@app.route('/api/mkdir', methods=['POST']) 
-def api_make_dir():
+@app.route('/api/ls', methods=['GET']) 
+#Howto Curl: curl http://[host]:[port]/api/ls?path=/Documents
+def api_ls_dir():
+    #-Check if args are given and define real and virt Path---
+    virtPath = request.args.get('path')
+    if virtPath == None:
+        virtPath = "/"
+        realPath = dataPath
+    else:
+        realPath = (dataPath + '/' + virtPath).replace('//', '/')
+    
+    if not os.path.isdir(realPath):
+        return 'path does not exist', 400
 
+    #-Build files and folder object--- 
+    dirObj = []
+    dirAry = os.listdir(realPath)
+    dirAry.sort()
+
+    #-for Folders---
+    for val in dirAry:
+        isVirtPath = (virtPath + '/' + val).replace('//', '/')
+        isRealPath = (realPath + '/' + val).replace('//', '/')
+        if os.path.isdir(isRealPath):
+            toAdd = { 
+                "name":val,
+                "path":isVirtPath,
+                "type":"dir"
+            }
+            dirObj.append(toAdd)
+    
+    #-for Files--- -> DQ: DAS IST ABSICHTLICH DOPPELT!!! ...wegen Sortierung Folder zuerrst....
+    for val in dirAry:
+        isVirtPath = (virtPath + '/' + val).replace('//', '/')
+        isRealPath = (realPath + '/' + val).replace('//', '/')
+        if os.path.isfile(isRealPath):
+            toAdd = { 
+                "name":val, 
+                "path":isVirtPath,
+                "type":"file"
+            }
+            dirObj.append(toAdd)
+    
+    jsonStr = json.dumps(dirObj, indent=2)
+    return jsonStr
+
+
+@app.route('/api/mkdir', methods=['POST']) 
+#Howto Curl: curl -X POST -F 'mkdir=newdir' -F 'path=/Documents' http://[host]:[port]/api/mkdir
+def api_make_dir():
     #-Check if all required POST args are given---
     try: 
         path = request.form['path']
@@ -260,6 +311,7 @@ def api_make_dir():
 
 #--------------------------------
 @app.route('/api/file/download', methods=['GET']) 
+#Howto Curl: curl http://[host]:[port]/api/file/download?path=/Documents/myFile.txt
 def api_file_download():
     #-Check if path GET arg is given, else error--- 
     if request.args.get('path') == None:
@@ -280,6 +332,7 @@ def api_file_download():
 #-------------------
 
 @app.route('/api/zip/download', methods=['GET']) 
+#Howto Curl: curl http://[host]:[port]/api/zip/download?path=/Documents
 def api_zip_download():
     #-Check if path GET arg is given, else error--- 
     if request.args.get('path') == None:
@@ -318,10 +371,8 @@ def api_zip_download():
 
 #------------------
 @app.route('/api/file/upload', methods=['POST']) 
+#Howto Curl: curl -X POST -F 'files[]=@/home/myuser/myfile.txt' -F 'path=/Downloads' http://[host]:[port]/api/file/upload
 def api_file_upload():
-    
-    #Howto Curl: curl -X POST -F 'files[]=@/home/myuser/myfile.txt' -F 'path=/Downloads' http://localhost:5000/api/file/upload
-    
     #-Check if all required POST args are given---
     try: 
         path = request.form['path']
@@ -361,6 +412,7 @@ def api_file_upload():
 
 #------------------
 @app.route('/api/zip/upload', methods=['POST']) 
+#Howto Curl: curl -X POST -F 'files[]=@/home/myuser/myarchive.zip' -F 'path=/Documents' http://[host]:[port]/api/zip/upload
 def api_zip_upload():
     #-Check if all required POST args are given---
     try: 
@@ -400,6 +452,7 @@ def api_zip_upload():
 
 #------------------
 @app.route('/api/data/delete', methods=['POST']) 
+#Howto Curl: curl -X POST -F 'path=/Documents/myFileOrFolder' http://[host]:[port]/api/data/delete
 def api_folder_delete():
      #-Check if all required POST args are given---
     try: 
@@ -431,7 +484,6 @@ def api_folder_delete():
     
     if chk == False: 
         return inf, 400
-
 
     #-Redirect if set-------
     if backTo != False:

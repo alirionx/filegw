@@ -7,7 +7,7 @@ addEventListener('click', function(event){
     }
 });
 
-function data_menu_call(event, typ){
+function data_menu_call(event, typ ){
     
     remove_elms_by_class("actMenuFrame");
     
