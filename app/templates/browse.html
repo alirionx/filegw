@@ -8,9 +8,9 @@
         {% set lnk = '?path='+entry['lnk'] %}
         <div onclick="location.href='{{ lnk }}';">{{ dir }}/</div>
     {% endfor %}
-        <button onclick="location.href='/mkdir?path={{ davPath }}';">mkdir</button>    
-        <button onclick="location.href='/zip/upload?path={{ davPath }}';">upload zip</button>
-        <button onclick="location.href='/file/upload?path={{ davPath }}';">upload</button>
+        <button onclick="location.href='/mkdir?path={{ virtPath }}';">mkdir</button>    
+        <button onclick="location.href='/zip/upload?path={{ virtPath }}';">upload zip</button>
+        <button onclick="location.href='/file/upload?path={{ virtPath }}';">upload</button>
     </div>
 
     <div css="exploreBox">
@@ -20,9 +20,9 @@
         {% set path = entry['path'] %}
         {% set lnk = '?path='+entry['lnk'] %}
 
-        {% set lnkPath = davPath+'/'+entry['path'] %}
-        {% if davPath == '/' %}
-            {% set lnkPath = davPath+entry['path'] %}
+        {% set lnkPath = virtPath+'/'+entry['path'] %}
+        {% if virtPath == '/' %}
+            {% set lnkPath = virtPath+entry['path'] %}
         {% endif %}
 
         {% if type == 'dir' %}

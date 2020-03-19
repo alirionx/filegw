@@ -24,6 +24,7 @@ body{
     min-width:800px;
     height:110px;
     z-index:2;
+    background-color: #fff;
 }
 #headBlock table{
     width: 98%;
@@ -144,7 +145,7 @@ body{
 }
 
 .browserBox div[css=exploreBox]{
-    background-color: #f6f6f6;
+    background-color: #fafafa;
     padding:8px;
     border-radius:8px;
 }
