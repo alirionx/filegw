@@ -14,6 +14,14 @@
 # Howto:https://www.codementor.io/@abhishake/minimal-apache-configuration-for-deploying-a-flask-app-ubuntu-18-04-phu50a7ft
 
 
+#-Create a docker nfs volume--------------------
+# docker volume create --driver local \
+#    --opt type=nfs \
+#    --opt o=addr=192.168.10.20,rw \
+#    --opt device=:/test \
+#    test
+
+
 #-Import needed modules---------------------------------------------------
 import os
 import sys

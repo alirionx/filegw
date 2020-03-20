@@ -1,7 +1,7 @@
 FROM ubuntu:bionic
 MAINTAINER daniel.quilitzsch@mhp.com
 
-RUN apt update && apt install -y python3 python3-venv apache2 libapache2-mod-wsgi-py3 
+RUN apt update && apt install -y python3 python3-venv apache2 libapache2-mod-wsgi-py3 samba 
 RUN a2enmod proxy && a2enmod proxy_http
 
 #python venv builded via pip in separate ubuntu:bionic container :)
@@ -16,6 +16,11 @@ RUN chmod +rx /app/globals.py
 #ADD venv/lib64/python3.6/site-packages/ /usr/lib/python3/dist-packages/ 
 #-----------
 
-COPY a2conf/000-default.conf /etc/apache2/sites-enabled/000-default.conf
+COPY lnx-conf/000-default.conf /etc/apache2/sites-enabled/000-default.conf
+COPY lnx-conf/smb.conf /etc/samba/smb.conf
 
-CMD . /venv/bin/activate && apachectl -D FOREGROUND
+COPY runsrv.sh /runsrv.sh
+RUN chmod +x /runsrv.sh
+CMD /runsrv.sh
+
+#CMD /usr/sbin/smbd && . /venv/bin/activate && apachectl -D FOREGROUND

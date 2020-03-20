@@ -8,7 +8,7 @@ urlBase = ''
 if os.getenv('base') != None:
     urlBase = os.getenv('base')
 
-dataPath = '/tmp'
+dataPath = '/home'
 if os.getenv('src') != None:
     if os.path.isdir(os.getenv('src')):
         dataPath = os.getenv('src')

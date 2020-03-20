@@ -9,6 +9,7 @@ import os
 import sys
 import shutil
 import json
+import datetime
 #import zipfile
 from flask import Flask, request, redirect, url_for, send_from_directory, session, render_template, send_file
 
@@ -263,15 +264,27 @@ def api_ls_dir():
         isVirtPath = (virtPath + '/' + val).replace('//', '/')
         isRealPath = (realPath + '/' + val).replace('//', '/')
         if os.path.isfile(isRealPath):
+            try: isSize = os.path.getsize(isRealPath)
+            except: isSize = None
+            try: isMtime =  datetime.datetime.fromtimestamp(os.path.getmtime(isRealPath)).strftime('%Y-%m-%d %H:%M')
+            except: isMtime = None
             toAdd = { 
                 "name":val, 
                 "path":isVirtPath,
-                "type":"file"
+                "type":"file",
+                "size": isSize,
+                "mtime": isMtime
             }
             dirObj.append(toAdd)
     
+    #-Clean pure JSON return-----
     jsonStr = json.dumps(dirObj, indent=2)
-    return jsonStr
+    res = app.response_class(
+        response=jsonStr,
+        status=200,
+        mimetype='application/json'
+    )
+    return res
 
 
 @app.route('/api/mkdir', methods=['POST']) 
