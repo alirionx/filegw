@@ -14,8 +14,8 @@ docker volume create \
 
 docker run \
     -itd \
-    -p 81:80 -p 5000:5000 \ 
+    -p 81:80 -p 5000:5000 \
     -v nfsdev:/data \
-    -e cifs=true \
-    --name filegw1 \ 
-    opensuse/leap /bin/bash
+    -e src=/data \
+    --name filegw1 \
+    filegw:v01
