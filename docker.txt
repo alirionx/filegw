@@ -9,7 +9,7 @@ docker volume create \
     --driver local \
     --opt type=cifs \
     --opt device=//192.168.10.20/nfsdev \
-    --opt o=username=dquilitzsch,password="Oviss1234!" \
+    --opt o=username=alirionx,password="4ChangeMe!" \
     cifsdev
 
 docker run \
